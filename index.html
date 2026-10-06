@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="แดชบอร์ดวิเคราะห์งบประมาณกระทรวงเกษตรและสหกรณ์ ปีงบประมาณ 2569">
+  <title>งบเกษตร 2569 | Budget Explorer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Sarabun:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <a class="skip-link" href="#main-content">ข้ามไปยังเนื้อหาหลัก</a>
+
+  <header class="site-header">
+    <div class="brand-wrap">
+      <div class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></div>
+      <div>
+        <p class="eyebrow">AGRICULTURE BUDGET EXPLORER</p>
+        <h1>งบประมาณกระทรวงเกษตรและสหกรณ์ <span>2569</span></h1>
+      </div>
+    </div>
+    <div class="header-meta">
+      <span class="data-dot" aria-hidden="true"></span>
+      <span id="dataState">กำลังเตรียมข้อมูล</span>
+    </div>
+  </header>
+
+  <main id="main-content">
+    <section class="intro" aria-labelledby="intro-title">
+      <div>
+        <p class="eyebrow accent">BUDGET APPROPRIATION · NOT DISBURSEMENT</p>
+        <h2 id="intro-title">ตามรอยเงินงบประมาณ<br><em>จากส่วนกลางสู่พื้นที่</em></h2>
+      </div>
+      <p class="intro-copy" id="dataSummary">โหลดข้อมูลการตั้งงบประมาณเพื่อดูโครงสร้างงบประมาณ ภาระผูกพัน และพื้นที่ที่ระบุในรายการ</p>
+    </section>
+
+    <section class="filter-panel" aria-label="ตัวกรองข้อมูล">
+      <div class="filter-heading">
+        <span class="filter-icon" aria-hidden="true">⌘</span>
+        <div><strong>กรองมุมมอง</strong><small id="filterCount">กำลังโหลด</small></div>
+      </div>
+      <div class="filter-controls">
+        <label>ช่วงปี<select id="fYearType" data-filter="YEAR_TYPE"></select></label>
+        <label>หน่วยงาน<select id="fUnit" data-filter="BUDGETARY_UNIT"></select></label>
+        <label>แผนงาน<select id="fPlan" data-filter="BUDGET_PLAN"></select></label>
+        <label>หมวดรายจ่าย<select id="fCat" data-filter="CATEGORY_LV1"></select></label>
+        <label>ภาค<select id="fRegion" data-filter="REGION"></select></label>
+        <label>จังหวัด<select id="fProv" data-filter="PROVINCE"></select></label>
+        <label class="search-control"><span class="sr-only">ค้นหารายการ</span><input id="fText" type="search" placeholder="ค้นหารายการ / โครงการ…" autocomplete="off"></label>
+      </div>
+      <div class="filter-actions">
+        <button class="button button-ghost" id="reset" type="button">รีเซ็ตตัวกรอง</button>
+        <button class="button button-primary" id="csv" type="button">↓ ดาวน์โหลดข้อมูลที่กรอง</button>
+      </div>
+    </section>
+
+    <nav class="tabs" aria-label="มุมมองการวิเคราะห์" role="tablist">
+      <button id="tab-overview" class="tab is-active" data-tab="overview" role="tab" aria-selected="true" aria-controls="panel-overview"><span>01</span> ภาพรวม</button>
+      <button id="tab-structure" class="tab" data-tab="structure" role="tab" aria-selected="false" aria-controls="panel-structure"><span>02</span> โครงสร้าง</button>
+      <button id="tab-geography" class="tab" data-tab="geography" role="tab" aria-selected="false" aria-controls="panel-geography"><span>03</span> พื้นที่</button>
+      <button id="tab-commitment" class="tab" data-tab="commitment" role="tab" aria-selected="false" aria-controls="panel-commitment"><span>04</span> ภาระผูกพัน</button>
+      <button id="tab-insights" class="tab" data-tab="insights" role="tab" aria-selected="false" aria-controls="panel-insights"><span>05</span> ความเสี่ยง</button>
+    </nav>
+
+    <section id="kpis" class="kpi-grid" aria-live="polite"></section>
+
+    <section id="panel-overview" class="tab-panel is-active" data-panel="overview" role="tabpanel" aria-labelledby="tab-overview">
+      <div class="section-lead"><div><p class="eyebrow accent">01 / WHAT</p><h2>เงินไปอยู่ที่ไหน</h2></div><p>มองภาพรวมการจัดสรรงบตามหน่วยงานและหมวดรายจ่าย</p></div>
+      <div class="dashboard-grid">
+        <article class="card span-8"><div class="card-head"><div><p class="chart-index">A1</p><h3>งบตามหน่วยงาน</h3></div><span class="card-note">15 อันดับแรก</span></div><div id="chUnit" class="chart chart-bar" aria-label="กราฟงบตามหน่วยงาน"></div></article>
+        <article class="card span-4"><div class="card-head"><div><p class="chart-index">A2</p><h3>สัดส่วนตามหมวดรายจ่าย</h3></div></div><div id="chCat" class="chart chart-donut" aria-label="กราฟสัดส่วนหมวดรายจ่าย"></div></article>
+        <article class="card span-7"><div class="card-head"><div><p class="chart-index">A3</p><h3>ลำดับชั้นของงบประมาณ</h3></div><span class="card-note">หน่วยงาน → หมวด → รายการ</span></div><div id="chTree" class="chart chart-tall" aria-label="Treemap งบประมาณ"></div></article>
+        <article class="card span-5"><div class="card-head"><div><p class="chart-index">A4</p><h3>รายการงบสูงสุด</h3></div><span class="card-note">ตามตัวกรอง</span></div><div class="table-wrap compact"><table id="topTable"><thead><tr><th>รายการ</th><th>หน่วยงาน</th><th class="number">งบประมาณ</th></tr></thead><tbody></tbody></table></div></article>
+      </div>
+    </section>
+
+    <section id="panel-structure" class="tab-panel" data-panel="structure" role="tabpanel" aria-labelledby="tab-structure" hidden>
+      <div class="section-lead"><div><p class="eyebrow accent">02 / HOW</p><h2>โครงสร้างของเงิน</h2></div><p>เปรียบเทียบกรอบแผนงาน ผลผลิต/โครงการ และหมวดรายจ่ายของแต่ละหน่วยงาน</p></div>
+      <div class="dashboard-grid">
+        <article class="card span-7"><div class="card-head"><div><p class="chart-index">B1</p><h3>แผนงานสู่ผลผลิตและโครงการ</h3></div><span class="card-note">คลิกเพื่อเจาะลึก</span></div><div id="chSun" class="chart chart-tall" aria-label="Sunburst แผนงานและโครงการ"></div></article>
+        <article class="card span-5"><div class="card-head"><div><p class="chart-index">B2</p><h3>หน่วยงาน × หมวดรายจ่าย</h3></div><span class="card-note">สีเข้ม = งบสูง</span></div><div id="chHeat" class="chart chart-tall" aria-label="Heatmap หน่วยงานและหมวดรายจ่าย"></div></article>
+        <article class="card span-12 narrative-card"><p class="chart-index">READING THE DATA</p><div id="structureNarrative" class="narrative"></div></article>
+      </div>
+    </section>
+
+    <section id="panel-geography" class="tab-panel" data-panel="geography" role="tabpanel" aria-labelledby="tab-geography" hidden>
+      <div class="section-lead"><div><p class="eyebrow accent">03 / WHERE</p><h2>เงินปรากฏบนพื้นที่ไหน</h2></div><p>พื้นที่สกัดจากข้อความรายการงบ จึงสะท้อนเฉพาะรายการที่ระบุสถานที่ได้</p></div>
+      <div class="dashboard-grid">
+        <article class="card span-7"><div class="card-head"><div><p class="chart-index">C1</p><h3>แผนที่งบประมาณรายจังหวัด</h3></div><span class="card-note" id="mapNote">กำลังตรวจสอบแผนที่</span></div><div id="chMap" class="chart chart-map" aria-label="แผนที่งบประมาณรายจังหวัด"></div></article>
+        <article class="card span-5"><div class="card-head"><div><p class="chart-index">C2</p><h3>จังหวัดที่ระบุงบสูงสุด</h3></div><span class="card-note">20 อันดับแรก</span></div><div id="chProv" class="chart chart-tall" aria-label="กราฟงบรายจังหวัด"></div></article>
+        <article class="card span-6"><div class="card-head"><div><p class="chart-index">C3</p><h3>ภาพรวมตามภูมิภาค</h3></div></div><div id="chRegion" class="chart chart-short" aria-label="กราฟงบรายภูมิภาค"></div></article>
+        <article class="card span-6 geo-card"><div class="card-head"><div><p class="chart-index">C4</p><h3>ความโปร่งใสเชิงพื้นที่</h3></div></div><div id="geoDetail" class="geo-detail"></div></article>
+      </div>
+    </section>
+
+    <section id="panel-commitment" class="tab-panel" data-panel="commitment" role="tabpanel" aria-labelledby="tab-commitment" hidden>
+      <div class="section-lead"><div><p class="eyebrow accent">04 / WHEN</p><h2>ภาระงบข้ามปี</h2></div><p>แยกงบปี 2569 ออกจากรายการภาระผูกพัน เพื่อไม่ให้ยอดรวมปะปนกัน</p></div>
+      <div class="dashboard-grid">
+        <article class="card span-8"><div class="card-head"><div><p class="chart-index">D1</p><h3>เส้นเวลางบประมาณและภาระผูกพัน</h3></div><span class="card-note">ปี พ.ศ.</span></div><div id="chYear" class="chart chart-tall" aria-label="กราฟภาระผูกพันตามปี"></div></article>
+        <article class="card span-4"><div class="card-head"><div><p class="chart-index">D2</p><h3>พื้นที่ทางการคลัง</h3></div></div><div id="commitmentDetail" class="commitment-detail"></div></article>
+        <article class="card span-12"><div class="card-head"><div><p class="chart-index">D3</p><h3>ภาระผูกพันแยกตามปี</h3></div><span class="card-note">ใช้ตัวกรองเดียวกับทั้งหน้า ยกเว้นช่วงปี</span></div><div class="table-wrap"><table id="yearTable"><thead><tr><th>ปีงบประมาณ (พ.ศ.)</th><th>ประเภท</th><th class="number">จำนวนรายการ</th><th class="number">งบประมาณ</th><th class="number">เทียบกับปี 2569</th></tr></thead><tbody></tbody></table></div></article>
+      </div>
+    </section>
+
+    <section id="panel-insights" class="tab-panel" data-panel="insights" role="tabpanel" aria-labelledby="tab-insights" hidden>
+      <div class="section-lead"><div><p class="eyebrow accent">05 / SO WHAT</p><h2>ความกระจุกตัวและจุดที่ควรอ่านต่อ</h2></div><p>เครื่องมือสำหรับตั้งคำถามเรื่องความยืดหยุ่นทางงบประมาณและความตรวจสอบได้</p></div>
+      <div class="dashboard-grid">
+        <article class="card span-7"><div class="card-head"><div><p class="chart-index">E1</p><h3>Pareto ของรายการงบ</h3></div><span class="card-note">ดู 300 รายการแรก</span></div><div id="chPareto" class="chart chart-tall" aria-label="กราฟ Pareto ของรายการงบ"></div></article>
+        <article class="card span-5"><div class="card-head"><div><p class="chart-index">E2</p><h3>สัญญาณที่ควรตรวจสอบ</h3></div></div><div id="redFlags" class="flag-list"></div></article>
+        <article class="card span-12"><div class="card-head"><div><p class="chart-index">E3</p><h3>50 รายการงบประมาณสูงสุด</h3></div><button id="downloadTop" class="link-button" type="button">ดาวน์โหลดรายการที่กรองทั้งหมด ↗</button></div><div class="table-wrap tall-table"><table id="fullTable"><thead><tr><th>#</th><th>รายการ</th><th>หน่วยงาน</th><th>แผนงาน</th><th>จังหวัด</th><th class="number">งบประมาณ</th></tr></thead><tbody></tbody></table></div></article>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div><strong>แหล่งข้อมูล</strong><span id="sourceNote">ไฟล์งบประมาณรายจ่าย กระทรวงเกษตรและสหกรณ์</span></div>
+    <div><strong>ข้อควรทราบ</strong><span>ข้อมูลนี้เป็นงบที่ตั้งไว้ ไม่ใช่งบที่เบิกจ่ายจริง · จังหวัดสกัดจากข้อความรายการ</span></div>
+    <div><strong>อัปเดตไฟล์</strong><span id="updatedNote">—</span></div>
+  </footer>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

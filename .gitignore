@@ -1,0 +1,6 @@
+# Python bytecode created when validating the data preparation script
+__pycache__/
+*.py[cod]
+
+# OS/editor noise
+.DS_Store

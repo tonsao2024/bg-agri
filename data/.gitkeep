@@ -1,0 +1,2 @@
+# Place Agr_Budget-2569.csv and (optionally) thailand.geojson in this directory.
+# budget.json is created locally by: python tools/prepare_data.py
