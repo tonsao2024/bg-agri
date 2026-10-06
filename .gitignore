@@ -1,4 +1,5 @@
-# Python bytecode created when validating the data preparation script
+# Local Python environment and bytecode used for data preparation
+.venv/
 __pycache__/
 *.py[cod]
 
